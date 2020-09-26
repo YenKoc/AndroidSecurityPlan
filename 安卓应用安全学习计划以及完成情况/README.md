@@ -7,3 +7,10 @@ https://github.com/r0ysue/AndroidSecurityStudy
 https://ctf.hacker101.com/
 
 # 第一周计划完成情况
+1. 加解密算法算勉强完成
+2. frida环境配好了，肉丝姐的github上frida的东西复现了一波
+3. 找不到wp，无语，算是把一题简单题给a了，wp没写，就是个发请求，看懂程序就能写
+
+# 第二周学习目标
+1. 看雪的frida课程继续看，这周看4节课，然后笔记放上去
+2. 肉丝师傅的github继续复现
