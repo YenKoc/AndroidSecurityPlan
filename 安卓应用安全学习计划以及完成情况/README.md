@@ -39,3 +39,13 @@ https://www.cnblogs.com/YenKoc/p/13845156.html
 2.nu1lctf的apk逆向题，要用到frida hook native的函数，又跑去
 看雪看了一波视频，重点还是找到基址和偏移，然后就可以hook参数
 和返回值，进而黑盒猜出函数，毕竟ollvm混淆的，太复杂了
+# 2020年10月22日
+1.研究了一波app抓包，配置好了环境，对应用层抓包有更深的理解，同时也知道了bypass客户端和服务器端证书校验的frida hook方式
+https://www.cnblogs.com/YenKoc/p/13856852.html
+2.把frida的三个作业写完了，还是比较简单的，第一个是常规对参数和返回值的hook，第二个是classloader的hook，然后踩了一些坑，
+attach和spawn这个注意一波，第三个是native的hook，然后对frida的反调试检测，
+https://www.cnblogs.com/YenKoc/p/13857610.html
+3.终于把那个天气app的bug解决了，搞了一晚上，原来是代码写错了，而且发现一个问题就是不卸载app的话，应该是有个默认的数据库存在app本地的
+，所以得先卸载，然后重装。
+
+明日计划：native层的frida hook以及天气app下一部分开发结束（接口变换后，一些返回参数的变化要调整）
