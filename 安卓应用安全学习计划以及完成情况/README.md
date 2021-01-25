@@ -538,3 +538,11 @@ so库的操作，感觉挺好玩的，这样的话，可以白嫖别人的so文�
 ##  明日计划:  
 1. xposed看雪视频学习
 2. 黑马的c++项目撸完
+
+# 2020年1月24日
+1. 黑马c++基础项目撸完了，放到github上了，准备把黑马三个项目都撸完，果然从底层学上来，理解知识就很快,继续看了十节的面向对象，继续冲核心知识
+2. xposed看雪看了两节，第一节是xposed的介绍和安装，了解了下xposed的原理，主要是通过替换/system/bin/app_processs文件控制zygote进程，又因为zygote进程是孵化进程，每次app启动时，都会加载xposed framework的xposedBridge.jar，从而实现对zygote进程以及jvm的劫持和hook,第二节就是xposed hook构造函数，写插件demo，有一套xposed 插件开发的流程，已经记到github上了，相比之下，frida简直太方便了，写个js文件，直接上去hook，xposed插件改动还得重新编译，再把机子重启，还有模块其实对所有app都会有影响，所以需要对包名做区分。
+## 明日计划:
+1. 陪老妈去医院看个病
+2. xposed插件demo编写，视频再继续一节
+3. c++继续学习
