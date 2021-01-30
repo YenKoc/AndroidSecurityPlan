@@ -584,3 +584,13 @@ so库的操作，感觉挺好玩的，这样的话，可以白嫖别人的so文�
 2. 看寒冰大佬的fart看雪文章，搜索博客理解classloader和dex关系
 3. xposed视频一节
 4. c++继承和多态
+# 2021年1月29日
+1. 实现了java层框架层常见加密算法自吐以及栈信息打印的xposed模块，其实就是通过hook
+框架层的几个构造函数以及一般函数，将参数以及结果打印出来，主要是锻炼xposed的熟练程度
+2. 看了寒冰大佬看雪文章，以及csdn上的几篇关于classloader类加载器的文章，感觉理解了不少，我个人理解是类加载器的类加载，是通过类的全限定名去找字节码文件，生成二进制流，实际上就是找dex文件中有没我们想要的类了，所以动态加载自定义的classloader将内存或者存储器中的dex加载进来，那个dex中类才是我们要实际hook的类，如果xposed直接去hook 加载app的pathclassloader的话，是找不到类的，所以我们要hook 加壳后的app，最重要的是得到真正加载dex的classloader，这里我们要挑选时机，一般加壳app，是需要修正classloader的，否则类没有生命周期，所以我们在application类下的oncreate或attachbase这两个方法下进行hook，通过反射获得当前修正后的classloader，再进行hook
+3. xposed视频看了两节，内容主要是xposed native，但是感觉没有讲精髓，就是如何通过定位so文件的内存基址，然后定位到符号地址，inline hook，这个没讲，感觉很可惜，只用两个现成的native hook框架来运行了个demo，看来还得看看这两个项目的源码，再自己实现一个，加油冲
+4. c++鸽了，项目写了有点久。。打算先放下，先去弄xposed，搞懂了再说
+
+# 明日计划:
+1. xposed native两个框架源码分析
+2. xposed指纹检测和简单定制
