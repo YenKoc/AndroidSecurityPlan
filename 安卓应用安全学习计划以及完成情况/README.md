@@ -610,3 +610,18 @@ so库的操作，感觉挺好玩的，这样的话，可以白嫖别人的so文�
 
 # 明日计划
 1. 继续看框架源码，尝试实现
+# 2021年2月1日
+1. 框架源码看的差不多了，再次跪拜珍惜大佬，c++水平很高
+，感觉自己目前来说，水平还不够，打算再把c++开发再给练练，
+来冲一波轮子
+2. xposed检测的话，看了美团技术团队18年的帖子以及github上
+也有个xposedchecker的轮子检测，检测的方式大概也就是查是否安装xposedinstall，
+以及检测是否有方法是从java变成了native，这里主要是xposed将app_process文件
+替换之后，函数的入口，变成了xposedbrige.jar中的函数入口，当函数被hook时，会
+先执行jni方法hookmethodnative函数指向，调用native方法xposedcallhandle，这个函数调用再调用java方法handlehookedMethod，所以会出现java方法变成native方法的情况，然后
+再检测/system/lib等目录中是否有xposed文件，再故意抛出异常检查调用栈是否含有xposed的api
+，再或者就是查看内存中是否加载了xposed的so和jar列表等，常规的检测方式。
+3. 2月了，得加油啊！！，xposed剩下个定制，弄完就去搞抓包了！！
+# 明日计划
+1. 看龙哥的xposed的最后一节视频，看看有没干货哈哈
+2. xposed的框架定制以及安卓源码编译研究
