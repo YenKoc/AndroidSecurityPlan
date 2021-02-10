@@ -693,3 +693,48 @@ service中自定义继承自binder类的对象中的方法，onBinde()我是看�
 # 2021年2月8日
 1. 今天发生了一些事，耽误了很多时间，有好的，也有不好的，感觉心态不是很好，还得自己调节下，晚上跑跑步冷静会，
 总是会莫名焦虑，希望状态尽快回归，还有好多坑要填呢）
+# 2021年2月9日
+1. 继续看ssl pinning的源码，框架太多，我重点就看了okhttp3的开发流程，发现网上这部分内容真的很少，
+要么就是各种copy，原理也没讲，其实这部分要从https的证书校验开始说起，肉丝那部分也没讲细，其实流程
+是这样的，先往服务端的443端口发送请求，服务端返回一个证书回来，然而查了很多博客，发现这个证书不仅
+是一个证书，而是一个证书链，上面有根证书以及中间证书以及真正的证书，客户端这时候要进行校验证书的时间
+是否到期，域名是否正确，然后再通过浏览器或者系统内置的根证书与证书链进行比对，是否含有，如果有的话，
+就将证书中的公钥取出来，然后就是和之前一样的流程了，至于ssl pinning目的就是为了防止中间人攻击
+，将域名和证书绑定起来，固定使用某某证书，okhttp的话，就是将每个证书的公钥取出来，作一个哈希，求出来的
+值，保存到客户端中，到时候验证，是将当前返回的证书公钥取出来，同样作哈希，然后和之前map中存入的域名和
+公钥哈希进行比对，看了下主要比对逻辑在CertificatePinner类中的check方法  
+```
+ public void check(String hostname, List<Certificate> peerCertificates)
+      throws SSLPeerUnverifiedException {
+
+    Set<ByteString> pins = findMatchingPins(hostname);
+
+    if (pins == null) return;
+
+    for (int i = 0, size = peerCertificates.size(); i < size; i++) {
+      X509Certificate x509Certificate = (X509Certificate) peerCertificates.get(i);
+      if (pins.contains(sha1(x509Certificate))) return; // Success!
+    }
+
+    // If we couldn't find a matching pin, format a nice exception.
+    StringBuilder message = new StringBuilder()
+        .append("Certificate pinning failure!")
+        .append("\n  Peer certificate chain:");
+    for (int i = 0, size = peerCertificates.size(); i < size; i++) {
+      X509Certificate x509Certificate = (X509Certificate) peerCertificates.get(i);
+      message.append("\n    ").append(pin(x509Certificate))
+          .append(": ").append(x509Certificate.getSubjectDN().getName());
+    }
+    message.append("\n  Pinned certificates for ").append(hostname).append(":");
+    for (ByteString pin : pins) {
+      message.append("\n    sha1/").append(pin.base64());
+    }
+    throw new SSLPeerUnverifiedException(message.toString());
+  }
+  ```
+  如果校验错误，就抛出错误，直接终止通信，会一直提醒证书不对。
+  2. 实战了一个某游戏网的app的登陆协议，感觉太容易了，毫无对抗可言，不过倒是打印堆栈这个点，我发现挺重要的
+  尤其是找到关键逻辑，objection有bug，堆栈打印不全，淦，还是靠我搜字符串搜出来的，我在想如果混淆了，不是直接
+  白给了，native层的函数都直接命令好的，符号表都没去，太感人了，通过比对源码，知道是des，同时key和iv在哪个位置
+  直接动调弄出来的，frida也hook了一波，感觉难度不咋的，没对抗，下次找点对抗的样本整
+  3. 重新回顾了一波计网，好久没看，感觉忘了好多，准备进行下一步的抓包学习
