@@ -770,7 +770,10 @@ registerNative挺难的，没想到啊，和native hook一摸一样，不过就�
 2. 跟着视频学了一波frida hook .init_array以及fulao那个apk的调试流程，frida hook .init_array这个其实也是通过熟悉so加载流程，跟着源码去看，不同的系统，里面的实现过程有区别，而是慢慢的我发现hook的意义是对app中间运行的某一状态进行的截取或者修改，所以正向中的开发是很重要的，发现so加载流程最终是调用了call_function这个linker中的函数，而且通过objection发现是导出函数，32位中直接hook linker中的函数就ok了，可以将参数打印出来，同时发现调用函数的虚拟地址，那么我们可以拿调用的so文件的基址，相减得到偏移，这样我们ida反编译后，可以直接定位到关键代码，何况里面很多不都是反调试或者解密的函数吗，意义还是蛮大的。
 3. fulao那个apk的调试流程，实际上完全体现了从开发出来，从我们要的是图片，先去搜索图片的类是什么，再进一步的hook所有类，再hook对应的方法，打印出调用栈，再进一步找到关键代码，对中间数据进行截取，这步是硬功夫
 <details>
-<summary>2020年2月14日</summary>  
-+ [x] [nothing more to say 2020](http://binlep.top/2020/10/27/%e3%80%90writeup%e3%80%91tokyowesterns-ctf-6th-2020-pwn-%e9%a2%98%e8%a7%a3/#nothing_more_to_say_2020)：格式化字符串签到题
-+ [x] [Online Nonogram](http://binlep.top/2020/10/27/%e3%80%90writeup%e3%80%91tokyowesterns-ctf-6th-2020-pwn-%e9%a2%98%e8%a7%a3/#Online_Nonogram)：一道泄露 heapbase 的方法比较特殊的题
-+ [ ] [smash](http://binlep.top/2020/10/27/%e3%80%90writeup%e3%80%91tokyowesterns-ctf-6th-2020-pwn-%e9%a2%98%e8%a7%a3/#smash)：一道关于 Control-flow Enforcement Technology 利用的题
+<summary>2020年2月14日</summary>
+
++ [ ] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
