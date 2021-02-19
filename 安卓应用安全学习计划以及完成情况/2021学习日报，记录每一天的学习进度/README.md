@@ -458,4 +458,8 @@ https://www.cnblogs.com/YenKoc/p/14404410.html
 # 2021年2月17日
 1. 走向一条从未设想过的道路，不知道之后走向会怎么样，今天
 给自己放了一天假，明天要认真学了
+# 2021年2月18日
+1. 把一代动态加载的加固自己手动撸了一次，感觉太强了，哪怕是几年前的产物，但是感觉设计这种要对安卓app启动的流程要非常熟悉，之前还有些不懂的地方，这次差不多搞清楚了，尤其是之前不理解反射替换mclassloader，跟着源码走了一遍，发现清晰了很多，简要回顾下加固流程，先准备一个源apk，一个壳的apk，壳apk主要负责解密apk，并加载，因为app启动时，会先执行application的attachBaseContext和onCreate方法，所以把脱壳的主要代码放在这里，attach方法主要作用就是通过反射替换mClassLoader为我们自定义的classloader，mClassLoader是组件类加载器，只有这个classloader中加载的dex的四大组件才有生命周期，所以需要替换
+，然后onCreate方法就是替换application对象，将application对象删除，然后替换成源apk的application对象，将app控制权，交给了源apk，同时在AndroidMainfest.xml中声明的四大组件，刚好注册，可以正常使用，现在想想感觉真是厉害。
+2. 在学习的过程中，看源码真的香，现在写代码不会直接百度这个函数的意思了，而是先去看源码的实现，从系统的角度去做和学，真的就是降维打击
 
