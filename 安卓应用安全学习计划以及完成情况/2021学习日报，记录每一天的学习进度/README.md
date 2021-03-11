@@ -535,3 +535,12 @@ https://www.cnblogs.com/YenKoc/p/14404410.html
 # 明日计划:
 1. sslsocket下部分，并打印出ip和端口
 2. fart深入学习
+
+# 2021年3月10号
+1. 又回过头把寒冰师傅的fart文章又看好几遍，加上无造师傅的文章，再结合fart的源码，发现两者的过程还是有不同的，但是思路还是一样的，无造师傅是通过遍历classloader，然后将classloader中的dexpathlist中的element中的dexfile取出来，并取出mcookie，再通过mcookie，可以遍历出所有的类名，然后通过杨神的libart hook，取出artmethod的偏移，再通过artmethod::invoke，进行主动调用，并将codeitem dump下来，进行一波修复，之后遇到artmethod，之前没有碰到过，看了几篇加载的文章，发现其实加载的是dex文件，然后生成的是class对象，中间有artmethod 和artfield的数组，无造师傅的脚本还没搞完，打算再写写，有些地方还是没理解
+2. ssl socket下部分结束，没讲什么，就是这个底层的类，无法得到ip和端口，所以往上层hook，并学到了内部类得到本类的实例，使用this.this$0，这个是可以通过androidstudio调试得到的233
+# 明日计划:
+1. 资产收集
+2. fd的抓包环境配好
+3. jni层的socket抓包
+4. idapython接口了解
