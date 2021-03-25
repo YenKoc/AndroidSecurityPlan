@@ -614,3 +614,7 @@ https://www.cnblogs.com/YenKoc/p/14404410.html
 # 2021年3月23日
 1. 依旧是一个无情的收集人，不过快结束了
 2. 继续重温程序员的自我修养，目前看到70页，睡前看看还挺不错的，明天应该可以学点东西了。
+
+# 2021年3月24日
+1. 把jni层的抓包看完了，好家伙jni跟源码下去，发现就是openssl的发包了，和常见的tcp和udp底层最后调用的libc的sendto，recvfrom不同，它这个最后调用是是libc的write和read函数，所以之前hook libc sendto 和recvfrom连密文都没抓到，hh， jni这边openssl，主要hook lissl中的SSL_write和SSL_read这两个函数，再下去就是bio_write函数，再下去就是调用libc的read和write函数了，通过栈回溯去跟流程。
+2. 程序员自我修养重温到120页，感觉每次看都有新的感悟，哈哈，非常nice
