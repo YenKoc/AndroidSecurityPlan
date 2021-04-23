@@ -669,3 +669,5 @@ https://www.cnblogs.com/YenKoc/p/14404410.html
 3. 志哥发了个他自己写的crackme，搞了半小时搞定了，好家伙，就是dex2c，不过代码没混淆2333，frida写了个exp就bypass了
 # 2021年4月7日-4月23日
 1. hw
+# 2021年4月8日
+1. 在出题，学了些新东西，嘿嘿
