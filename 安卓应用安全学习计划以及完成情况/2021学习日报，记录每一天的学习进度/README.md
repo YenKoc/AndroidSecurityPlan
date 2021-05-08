@@ -724,3 +724,7 @@ https://www.cnblogs.com/YenKoc/p/14404410.html
 1. 早上在弄报销的事情，搞定了。
 2. 下午和晚上主要是就是在弄反调试的东西，终于把双进程的反调试调好了，然后下一步就是frida反调试，这里我是直接看的qt爷的github上学的，好几个月前刚学安卓其实就看过一手，不过当时很多地方不太理解，比如为什么要自定义的libc函数呢，直接使用syscall去调用，其实就是为了防止libc库被hook，然后这里大佬主要是通过搜索/proc/self/maps的so，然后在可疑的so的内存中，进行搜索frida的string。
 3. 又找了几篇外国师傅的博客关于frida反调试的几种方式，比如签名校验，对内嵌的frida进行detect，搜索maps中frida-agent.so，或者libfrida-agent.so，比如ps 命令，搜索frida-server， 搜索text section，各种骚操作，看看github学习一手hh，真不错
+
+# 2021年5月7日
+1. frida反调试搞起，尝试了几台测试机，都没啥问题，基本就是spawn就报错，要不就是可以起脚本，但是hook会报错，基本效果达到了，不过要bypass，感觉也easy，所以我得把符号都去掉，加大混淆难度
+2. 准备把java层都方法全部native化，好家伙，还挺麻烦的，暂时就把onCreate native化了，后续看看java层再搞点什么操作，语法还有些不熟悉，只能慢慢调试了，那种dex2c是怎么直接搞成native的，打算这部分搞完，去看看别人的源码，学习学习）
