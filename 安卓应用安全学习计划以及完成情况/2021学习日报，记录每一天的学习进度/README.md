@@ -968,3 +968,144 @@ dexfile，再拿到dex的首地址和size
 1. 对fart深度跟着玩玩，发现自己的几个问题，第一个就是编译源码刷机不熟练，尤其是部分编译，再刷入，
 这样对沙箱定制会比较快，毕竟从头编译一个镜像太慢了
 2. frida实现fart还是遇到了不少的问题，还在研究中
+```
+//It's from my teacher hanbin and youzi
+
+
+
+
+
+//dump dex
+var dex_maps={}
+function dumpdex()
+{
+    var DefineClassMethod=Module.findExportByName("libart.so","_ZN3art11ClassLinker11DefineClassEPNS_6ThreadEPKcmNS_6HandleINS_6mirror11ClassLoaderEEERKNS_7DexFileERKNS9_8ClassDefE");
+    if(DefineClassMethod!=undefined)
+    {
+        console.log("DefineClass at"+DefineClassMethod);
+        Interceptor.attach(DefineClassMethod,{
+            onEnter:function(args)
+            {
+                var dex_file=args[5];
+                var  base=ptr(dex_file).add(Process.pointerSize).readPointer();
+                var size=ptr(dex_file).add(Process.pointerSize+Process.pointerSize).readUInt();
+                if(dex_maps[base]==undefined)
+                {
+                    dex_maps[base]=size;
+                    console.log("hook_dex:",base,size);
+                }
+            }
+        })
+    }
+}
+function get_self_process_name() {
+    var openPtr = Module.getExportByName('libc.so', 'open');
+    var open = new NativeFunction(openPtr, 'int', ['pointer', 'int']);
+ 
+    var readPtr = Module.getExportByName("libc.so", "read");
+    var read = new NativeFunction(readPtr, "int", ["int", "pointer", "int"]);
+ 
+    var closePtr = Module.getExportByName('libc.so', 'close');
+    var close = new NativeFunction(closePtr, 'int', ['int']);
+ 
+    var path = Memory.allocUtf8String("/proc/self/cmdline");
+    var fd = open(path, 0);
+    if (fd != -1) {
+        var buffer = Memory.alloc(0x1000);
+ 
+        var result = read(fd, buffer, 0x1000);
+        close(fd);
+        result = ptr(buffer).readCString();
+        return result;
+    }
+ 
+    return "-1";
+}
+function dealwithClassLoader(classloaderobj) {
+    if (Java.available) {
+        Java.perform(function () {
+            try {
+                var dexfileclass = Java.use("dalvik.system.DexFile");
+                console.log("dexfileclass",dexfileclass);
+                var BaseDexClassLoaderclass = Java.use("dalvik.system.BaseDexClassLoader");
+            
+                var DexPathListclass = Java.use("dalvik.system.DexPathList");
+                var Elementclass = Java.use("dalvik.system.DexPathList$Element");
+                var basedexclassloaderobj = Java.cast(classloaderobj, BaseDexClassLoaderclass);
+                var tmpobj = basedexclassloaderobj.pathList.value;
+                var pathlistobj = Java.cast(tmpobj, DexPathListclass);
+                var dexElementsobj = pathlistobj.dexElements.value;
+                if (dexElementsobj != null) {
+                    for (var i in dexElementsobj) {
+                        var obj = dexElementsobj[i];
+                        var elementobj = Java.cast(obj, Elementclass);
+                        tmpobj = elementobj.dexFile.value;
+                        var dexfileobj = Java.cast(tmpobj, dexfileclass);
+                        const enumeratorClassNames = dexfileobj.entries();
+                        while (enumeratorClassNames.hasMoreElements()) {
+                            var className = enumeratorClassNames.nextElement().toString();
+                            console.log("start loadclass->", className);
+                            var loadclass = classloaderobj.loadClass(className);
+                            var methods=loadclass.getDeclaredMethods();
+                            for(var  i =0;i<methods.length;i++)
+                            
+                             var methodd=methods[i];
+                             console.log("method start:",methodd);
+                             var test=[];
+                             var  objClass=Java.use("java.lang.object");
+                             for(var  j =0;j<methodd.getParameterTypes().length.value;j++)
+                             {
+                                test.append(1);
+                                console.log("fafa\n");
+                             }
+                             var objss=Java.array(objClass,test);
+                             methodd.setAccessible(true);
+                             methodd.invoke(null,objss);
+                             console.log("method over!\n")
+                            }
+                            //console.log("methods",methods);
+                            console.log("after loadclass->", loadclass);
+                        }
+
+                    }
+                }
+             catch (e) {
+                console.log(e)
+            }
+
+        });
+    }
+}
+function fart() {
+    if (Java.available) {
+        Java.perform(function () {
+         
+            //上面是利用被动调用进行函数粒度的dump，对app正常运行过程中自己加载的所有类函数进行dump
+            Java.enumerateClassLoaders({
+
+                onMatch: function (loader) {
+                    try {
+                        if(loader.toString().indexOf("BootClass")==-1)
+                        {
+                            console.log("startdealwithclassloader:", loader, '\n');
+                            dealwithClassLoader(loader);
+
+                        }
+                        
+                    } catch (e) {
+                        console.log("error", e);
+                    }
+
+                },
+                onComplete: function () {
+                    //console.log("find  Classloader instance over");
+
+                }
+            });
+            
+            //上面为对当前ClassLoader中的所有类进行主动加载，从而完成ArtMethod中的CodeItem的dump
+        });
+    }
+}
+setImmediate(dumpdex)
+```
